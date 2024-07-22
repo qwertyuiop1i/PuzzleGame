@@ -7,6 +7,21 @@ public class DragBox : MonoBehaviour
     public float moveSpeed = 5f;
     private Rigidbody2D rb;
     private Vector2 movement;
+    private bool isDragging = false;
+    private Vector3 offset;
+
+    void OnMouseDown()
+    {
+        isDragging = true;
+        offset = transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
+    }
+
+    void OnMouseUp()
+    {
+        isDragging = false;
+    }
+
+
 
     void Start()
     {
@@ -15,6 +30,11 @@ public class DragBox : MonoBehaviour
 
     void Update()
     {
+        if (isDragging)
+        {
+            Vector3 newPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) + offset;
+            transform.position = newPosition;
+        }
 
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
