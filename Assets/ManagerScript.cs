@@ -5,27 +5,34 @@ using UnityEngine;
 public class ManagerScript : MonoBehaviour
 {
     public GameObject selected;
-    public float gridSize=1f;
-    void Start()
-    {
-       
-    }
+    public float gridSize = 1f;
 
-    // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButtonDown(0))
         {
-            place(selected);
+            Place(selected);
         }
     }
-    void selectBuilding(GameObject sel)
+
+    public void SelectBuilding(GameObject sel)
     {
         selected = sel;
     }
-    void place(GameObject s)
-    {
-        Instantiate(s);
-    }
 
+    void Place(GameObject s)
+    {
+        if (s == null)
+            return;
+
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+        // Snap to grid
+        float gridX = Mathf.RoundToInt(mousePos.x / gridSize) * gridSize;
+        float gridY = Mathf.RoundToInt(mousePos.y / gridSize) * gridSize;
+        Vector2 gridPosition = new Vector2(gridX, gridY);
+
+ 
+        Instantiate(s, gridPosition, Quaternion.identity);
+    }
 }
