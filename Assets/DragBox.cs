@@ -30,6 +30,8 @@ public class DragBox : MonoBehaviour
         Quaternion rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
 
         transform.rotation = rotation;
+            
+       
     }
 
     void FixedUpdate()
@@ -37,5 +39,9 @@ public class DragBox : MonoBehaviour
 
         rb.MovePosition(rb.position + movement.normalized * moveSpeed * Time.fixedDeltaTime);
 
+    }
+    void transmute()
+    {
+        Debug.Log("add");
     }
 }
