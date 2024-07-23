@@ -5,6 +5,7 @@ using UnityEngine;
 public class numberTracker : MonoBehaviour
 {
     // Start is called before the first frame update
+    [SerializeField]
     public Dictionary<string, int> blockCounts = new Dictionary<string, int>();
     void Start()
     {
