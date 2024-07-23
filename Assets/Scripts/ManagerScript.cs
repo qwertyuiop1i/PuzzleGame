@@ -7,7 +7,7 @@ public class ManagerScript : MonoBehaviour
     public GameObject selected;
     public GameObject grid;
     public float gridSize = 1f;
-
+    //public bool rotatable;
     private List<GameObject> placedObjects = new List<GameObject>();
 
     void Update()
@@ -58,5 +58,10 @@ public class ManagerScript : MonoBehaviour
             placedObjects.RemoveAt(placedObjects.Count - 1);
             Destroy(lastPlaced);
         }
+    }
+
+    public void play()
+    {
+
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 public class wireCode : MonoBehaviour
 {
     public float tileSize = 1f;
-
+    private Sprite[] costumes;
     public GameObject GetNeighboringTile(GameObject currentTile, int direction)
     {
         Vector3 currentPosition = currentTile.transform.position;
