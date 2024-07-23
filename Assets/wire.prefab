@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4577657656446022906}
   m_Layer: 0
   m_Name: wire
-  m_TagString: Untagged
+  m_TagString: Wire
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -98,6 +98,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7717f35f99192f48a4e39fe510070a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mass: 0
+  rb: {fileID: 0}
+  conductivity: 0
   tileSize: 1
 --- !u!61 &4577657656446022906
 BoxCollider2D:

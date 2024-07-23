@@ -12,7 +12,7 @@ public class ManagerScript : MonoBehaviour
     //public bool rotatable;
     private List<GameObject> placedObjects = new List<GameObject>();
 
-    public List<List<GameObject>> grid;
+    public List<List<GameObject>>? grid;
 
     public GameObject gr;
 
@@ -21,17 +21,19 @@ public class ManagerScript : MonoBehaviour
     private int gridIndexX;
     private int gridIndexY;
 
-    public GameObject light;
+    public GameObject lit;
 
     private HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
 
     public bool HasWirePathToLight(GameObject ic)
     {
-        if (ic == null || light == null || grid == null || grid.Count == 0)
+        if (ic == null || lit == null || grid == null || grid.Count == 0)
+        {
             return false;
+        }
 
-        int gridIndexX = Mathf.RoundToInt((ic.transform.position.x + gridSize / 2) / gridSize);
-        int gridIndexY = Mathf.RoundToInt((ic.transform.position.y + gridSize / 2) / gridSize);
+        gridIndexX = Mathf.RoundToInt((ic.transform.position.x + gridSize / 2 + 7.778f) / gridSize);
+        gridIndexY = Mathf.RoundToInt((ic.transform.position.y + gridSize / 2 + 2.121f) / gridSize);
 
 
         bool[,] visited = new bool[grid.Count, grid[0].Count];
@@ -42,18 +44,34 @@ public class ManagerScript : MonoBehaviour
     private bool DFS(int x, int y, bool[,] visited)
     {
         // Base cases
+        if (grid[x][y] == null)
+        {
+            return false;
+        }
         if (x < 0 || x >= grid.Count || y < 0 || y >= grid[0].Count)
+        {
+            Debug.Log("Failed at b/c COUNTING ERROR " + x + " " + y);
             return false;
+        }
         if (visited[x, y])
+        {
+            Debug.Log("Failed at b/c visited ERROR " + x + " " + y);
             return false;
-        if (grid[x][y] == light)
+        }
+        if (grid[x][y] == lit)
             return true;
 
         visited[x, y] = true;
-
+        //Debug.Log("analy1");
         // Check neighbors (up, down, left, right)
-        if (grid[x][y].tag == "Wire")
+        if (grid[x][y] != null)
         {
+            Debug.Log(grid[x][y].name + " at " + x + " " + y);
+        }
+        if (grid[x][y].tag == "Wire"||grid[x][y].name=="circut")
+
+        {
+            Debug.Log("analy2");
             return DFS(x + 1, y, visited) ||
                    DFS(x - 1, y, visited) ||
                    DFS(x, y + 1, visited) ||
@@ -85,13 +103,13 @@ public class ManagerScript : MonoBehaviour
             Debug.Log(gridIndexX + " " + gridIndexY);
         }
 
-        gridIndexX = Mathf.RoundToInt((light.transform.position.x + gridSize / 2 + 7.778f) / gridSize);
-        gridIndexY = Mathf.RoundToInt((light.transform.position.y + gridSize / 2 + 2.121f) / gridSize);
+        gridIndexX = Mathf.RoundToInt((lit.transform.position.x + gridSize / 2 + 7.778f) / gridSize);
+        gridIndexY = Mathf.RoundToInt((lit.transform.position.y + gridSize / 2 + 2.121f) / gridSize);
 
 
         if (gridIndexX >= 0 && gridIndexX < grid.Count && gridIndexY >= 0 && gridIndexY < grid[0].Count)
         {
-            grid[gridIndexX][gridIndexY] = light;
+            grid[gridIndexX][gridIndexY] = lit;
             Debug.Log(gridIndexX + " " + gridIndexY);
         }
 
@@ -116,8 +134,9 @@ public class ManagerScript : MonoBehaviour
 
             if (HasWirePathToLight(initialCirc))
             {
-                Debug.Log("t");
+                Debug.Log("true");
             }
+
 
         }
 
