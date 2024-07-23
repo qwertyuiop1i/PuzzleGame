@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Rendering.Universal;
 public class ManagerScript : MonoBehaviour
 {
     public GameObject selected;
@@ -27,6 +27,8 @@ public class ManagerScript : MonoBehaviour
 
     private HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
 
+    public List<Vector2Int> path;
+
     public bool HasWirePathToLight(GameObject ic)
     {
         if (ic == null || lit == null || grid == null || grid.Count == 0)
@@ -40,6 +42,7 @@ public class ManagerScript : MonoBehaviour
 
         bool[,] visited = new bool[grid.Count, grid[0].Count];
 
+        
         return DFS(gridIndexX, gridIndexY, visited);
     }
 
@@ -62,26 +65,33 @@ public class ManagerScript : MonoBehaviour
             return false;
         }
         if (grid[x][y] == lit)
+        {
+            //path.Add(new Vector2Int(x, y));
+
             return true;
+        }
 
         visited[x, y] = true;
+        path.Add(new Vector2Int(x, y));
         //Debug.Log("analy1");
         // Check neighbors (up, down, left, right)
-        if (grid[x][y] != null)
-        {
-            Debug.Log(grid[x][y].name + " at " + x + " " + y);
-        }
+      //  if (grid[x][y] != null)
+      //  {
+     //       Debug.Log(grid[x][y].name + " at " + x + " " + y);
+     //  }
         if (grid[x][y].tag == "Wire"||grid[x][y].name=="circut")
 
         {
-            Debug.Log("analy2");
+            //Debug.Log("analy2");
             return DFS(x + 1, y, visited) ||
                    DFS(x - 1, y, visited) ||
                    DFS(x, y + 1, visited) ||
                    DFS(x, y - 1, visited);
         }
-
+        Debug.Log(path);
+        path.RemoveAt(path.Count - 1);
         return false;
+
     }
     public void Start()
     {
@@ -138,7 +148,15 @@ public class ManagerScript : MonoBehaviour
             if (HasWirePathToLight(initialCirc))
             {
                 Debug.Log("true");
+                Debug.Log("Path:");
+                foreach (Vector2Int position in path)
+                {
+                    Debug.Log(position);
+                }
+                Debug.Log("End path");
+                lit.GetComponent<Light2D>().intensity = 0.6f;
                 winScreen.SetActive(true);
+                isPlaying = false;
 
             }
             else
