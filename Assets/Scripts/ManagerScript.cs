@@ -8,11 +8,17 @@ public class ManagerScript : MonoBehaviour
     public GameObject grid;
     public float gridSize = 1f;
 
+    private List<GameObject> placedObjects = new List<GameObject>();
+
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
             Place(selected);
+        }
+        else if (Input.GetKeyDown(KeyCode.Z))
+        {
+            UndoPlacement();
         }
     }
 
@@ -35,12 +41,22 @@ public class ManagerScript : MonoBehaviour
         Collider2D overlap = Physics2D.OverlapBox(gridPosition, s.GetComponent<Collider2D>().bounds.size, 0f);
         if (overlap != null)
         {
-           
             Debug.Log("Collision detected!");
             return;
         }
 
         GameObject temp = Instantiate(s, gridPosition, Quaternion.identity);
         temp.transform.parent = grid.transform;
+        placedObjects.Add(temp);
+    }
+
+    void UndoPlacement()
+    {
+        if (placedObjects.Count > 0)
+        {
+            GameObject lastPlaced = placedObjects[placedObjects.Count - 1];
+            placedObjects.RemoveAt(placedObjects.Count - 1);
+            Destroy(lastPlaced);
+        }
     }
 }

@@ -6,7 +6,7 @@ public class ObjectBehavior : MonoBehaviour
 {
     public float mass;
     public Rigidbody2D rb;
-    public float gravity;
+    public float conductivity;
       
     void Start()
     {
