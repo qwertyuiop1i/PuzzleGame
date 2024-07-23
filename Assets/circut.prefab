@@ -9723,4 +9723,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7717f35f99192f48a4e39fe510070a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileSize: 1
+  tileSize: 0.70710677
