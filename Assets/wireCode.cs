@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class wireCode : MonoBehaviour
 {
+
+    public float mass;
+
+    public Rigidbody2D rb;
+    public float conductivity;
+
     public float tileSize = 1f;
     private Sprite[] costumes;
     public GameObject GetNeighboringTile(GameObject currentTile, int direction)

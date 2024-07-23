@@ -6,6 +6,8 @@ public class ManagerScript : MonoBehaviour
 {
     public GameObject selected;
 
+    public bool isPlaying = false;
+
     public float gridSize = 1 / (Mathf.Sqrt(2));
     //public bool rotatable;
     private List<GameObject> placedObjects = new List<GameObject>();
@@ -18,6 +20,48 @@ public class ManagerScript : MonoBehaviour
 
     private int gridIndexX;
     private int gridIndexY;
+
+    public GameObject light;
+
+    private HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
+
+    public bool HasWirePathToLight(GameObject ic)
+    {
+        if (ic == null || light == null || grid == null || grid.Count == 0)
+            return false;
+
+        int gridIndexX = Mathf.RoundToInt((ic.transform.position.x + gridSize / 2) / gridSize);
+        int gridIndexY = Mathf.RoundToInt((ic.transform.position.y + gridSize / 2) / gridSize);
+
+
+        bool[,] visited = new bool[grid.Count, grid[0].Count];
+
+        return DFS(gridIndexX, gridIndexY, visited);
+    }
+
+    private bool DFS(int x, int y, bool[,] visited)
+    {
+        // Base cases
+        if (x < 0 || x >= grid.Count || y < 0 || y >= grid[0].Count)
+            return false;
+        if (visited[x, y])
+            return false;
+        if (grid[x][y] == light)
+            return true;
+
+        visited[x, y] = true;
+
+        // Check neighbors (up, down, left, right)
+        if (grid[x][y].tag == "Wire")
+        {
+            return DFS(x + 1, y, visited) ||
+                   DFS(x - 1, y, visited) ||
+                   DFS(x, y + 1, visited) ||
+                   DFS(x, y - 1, visited);
+        }
+
+        return false;
+    }
     public void Start()
     {
         grid = new List<List<GameObject>>();
@@ -38,19 +82,46 @@ public class ManagerScript : MonoBehaviour
         if (gridIndexX >= 0 && gridIndexX < grid.Count && gridIndexY >= 0 && gridIndexY < grid[0].Count)
         {
             grid[gridIndexX][gridIndexY] = initialCirc;
+            Debug.Log(gridIndexX + " " + gridIndexY);
+        }
+
+        gridIndexX = Mathf.RoundToInt((light.transform.position.x + gridSize / 2 + 7.778f) / gridSize);
+        gridIndexY = Mathf.RoundToInt((light.transform.position.y + gridSize / 2 + 2.121f) / gridSize);
+
+
+        if (gridIndexX >= 0 && gridIndexX < grid.Count && gridIndexY >= 0 && gridIndexY < grid[0].Count)
+        {
+            grid[gridIndexX][gridIndexY] = light;
+            Debug.Log(gridIndexX + " " + gridIndexY);
         }
 
     }
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            Place(selected);
+        if (!isPlaying) {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Place(selected);
+            }
+            else if (Input.GetKeyDown(KeyCode.Z))
+            {
+                UndoPlacement();
+            }
         }
-        else if (Input.GetKeyDown(KeyCode.Z))
+        if (isPlaying)
         {
-            UndoPlacement();
+
+            gridIndexX = Mathf.RoundToInt((initialCirc.transform.position.x + gridSize / 2 + 7.778f) / gridSize);
+            gridIndexY = Mathf.RoundToInt((initialCirc.transform.position.y + gridSize / 2 + 2.121f) / gridSize);
+
+            if (HasWirePathToLight(initialCirc))
+            {
+                Debug.Log("t");
+            }
+
         }
+
+
     }
 
     public void SelectBuilding(GameObject sel)
@@ -89,6 +160,7 @@ public class ManagerScript : MonoBehaviour
         {
             grid[gridIndexX][gridIndexY] = temp;
         }
+        Debug.Log(gridIndexX + " " + gridIndexY);
 
 
 
