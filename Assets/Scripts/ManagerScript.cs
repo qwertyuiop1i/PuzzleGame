@@ -21,6 +21,8 @@ public class ManagerScript : MonoBehaviour
     private int gridIndexX;
     private int gridIndexY;
 
+    public GameObject winScreen;
+
     public GameObject lit;
 
     private HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
@@ -44,18 +46,19 @@ public class ManagerScript : MonoBehaviour
     private bool DFS(int x, int y, bool[,] visited)
     {
         // Base cases
-        if (grid[x][y] == null)
-        {
-            return false;
-        }
+        
         if (x < 0 || x >= grid.Count || y < 0 || y >= grid[0].Count)
         {
-            Debug.Log("Failed at b/c COUNTING ERROR " + x + " " + y);
+           // Debug.Log("Failed at b/c COUNTING ERROR " + x + " " + y);
             return false;
         }
         if (visited[x, y])
         {
-            Debug.Log("Failed at b/c visited ERROR " + x + " " + y);
+            //Debug.Log("Failed at b/c visited ERROR " + x + " " + y);
+            return false;
+        }
+        if (grid[x][y] == null)
+        {
             return false;
         }
         if (grid[x][y] == lit)
@@ -135,6 +138,13 @@ public class ManagerScript : MonoBehaviour
             if (HasWirePathToLight(initialCirc))
             {
                 Debug.Log("true");
+                winScreen.SetActive(true);
+
+            }
+            else
+            {
+                Debug.Log("False");
+                isPlaying = false;
             }
 
 
@@ -203,6 +213,6 @@ public class ManagerScript : MonoBehaviour
 
     public void play()
     {
-
+        isPlaying = true;
     }
 }
