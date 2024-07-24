@@ -156,7 +156,7 @@ public class ManagerScript : MonoBehaviour
                 Debug.Log("End path");
                 lit.GetComponent<Light2D>().intensity = 0.6f;
                 winScreen.SetActive(true);
-                isPlaying = false;
+
 
             }
             else
